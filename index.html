@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>three.js</title>
+    <script src="js/libs/three.js"></script>
+    <script src="js/libs/WebGL.js"></script>
+    <script src="js/chapter01.js"></script>
+    
+    <style>
+        #menu {
+            margin: 50px auto;
+            text-align: center;
+        }
+
+        a {
+           color:#009eff;
+           margin: 0 10px;
+        }
+
+        a:hover {
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <div id="container">
+        <div id="menu">
+            <a href="html/chapter01.html">1. 创建一个场景</a>
+            <a href="html/chapter02.html">2. 鼠标控制场景旋转缩放</a>
+            <a href="html/chapter03.html">3. 天空盒子</a>
+            <a href="html/chapter04.html">4. 3D全景图</a>
+        </div>
+    </div>
+
+    <script>
+        if (!THREE.WEBGL.isWebGLAvailable()) {
+            var warning = THREE.WEBGL.getWebGLErrorMessage();
+            document.getElementById('container').appendChild(warning);
+            document.getElementById('menu').remove();
+        }
+    </script>
+</body>
+</html>

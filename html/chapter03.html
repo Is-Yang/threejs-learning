@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>天空盒子</title>
+    <script src="../js/libs/three.js"></script>
+    <script src="../js/libs/OrbitControls.js"></script>
+    <script src="../js/libs/stats.min.js"></script>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body>
+    <div id="stats-output"></div>
+    
+    <script>
+        var stats = new Stats();
+        // 如果参数设置为“0”，那么我们检测的是画面每秒传输帧数（fps），如果参数设置为1，则检测的是画面渲染时间
+        stats.setMode(0);
+        stats.domElement.style.position = 'absolute';
+        stats.domElement.style.left = '0px';
+        stats.domElement.style.top = '0px';
+        document.getElementById("stats-output").appendChild(stats.domElement);
+    </script>
+    <script src="../js/chapter03.js"></script>
+</body>
+</html>
