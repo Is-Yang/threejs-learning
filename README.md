@@ -79,13 +79,36 @@ function animate() {
 
 ### 场景对浏览器的自适应
 ```javascript
+// 透视投影相机PerspectiveCamera自适应渲染
 window.addEventListener('resize', onResize, false);
-
 function onResize() {
-    camera.aspect = window.innerWidth / window.innerHeight;
-    camera.updateProjectionMatrix();
+    // 重置渲染器输出画布canvas尺寸
     renderer.setSize(window.innerWidth, window.innerHeight);
+    // 通常是使用画布的宽/画布的高。默认值是1
+    camera.aspect = window.innerWidth / window.innerHeight;
+    // 更新摄像机投影
+    camera.updateProjectionMatrix();
 }
+```
+
+```javascript
+// 正投影相机OrthographicCamera自适应渲染
+window.addEventListener('resize', onResize, false);
+function onResize() {
+    // 三维场景显示范围控制系数，系数越大，显示的范围越大
+    var s = 200; 
+
+    // 重置渲染器输出画布canvas尺寸
+    renderer.setSize(window.innerWidth,window.innerHeight);
+    // 重置相机投影的相关参数
+    k = window.innerWidth/window.innerHeight;//窗口宽高比
+    camera.left = -s*k;
+    camera.right = s*k;
+    camera.top = s;
+    camera.bottom = -s;
+    // 更新摄像机投影
+    camera.updateProjectionMatrix ();
+};
 ```
 
 ### 鼠标操作控件 OrbitControls.js

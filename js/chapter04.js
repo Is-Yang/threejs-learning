@@ -1,105 +1,86 @@
-var scene = new THREE.Scene;
-
-var camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 1000);
-// 创建一个三维向量 (0, 0, 0) - (x, y, z)
-camera.target = new THREE.Vector3(0, 0, 0)
-
-// 创建一个几何体
-var geometry = new THREE.SphereBufferGeometry(500, 60, 40);
-geometry.scale(-1, 1, 1);
-
-// 加载图片
-var texture = new THREE.TextureLoader().load('/images/fullview.jpg');
-// 设置材质对象，设置图片集合
-var material = new THREE.MeshBasicMaterial({
-    map: texture
-})
-// 将几何体，与材质放入网格中
-var mesh = new THREE.Mesh(geometry, material);
-scene.add(mesh)
-
-/**
- * 创建渲染器三部曲
- * 设置像素比
- * 设置渲染视图的大小
- * 将节点追加到dom中
- *  */ 
-var renderer = new THREE.WebGLRenderer();
-renderer.setPixelRatio(window.devicePixelRatio);
-renderer.setSize(window.innerWidth, window.innerHeight);
-document.body.appendChild(renderer.domElement);
-
-// 监听鼠标按下
-document.addEventListener( 'mousedown', onPointerStart, false );
-// 监听鼠标移动
-document.addEventListener( 'mousemove', onPointerMove, false );
-// 监听鼠标释放
-document.addEventListener( 'mouseup', onPointerUp, false );
-
-// 监听鼠标缩放
-document.addEventListener('wheel', onDocumentMouseWheel, false);
-
-// 监听触摸开始
-document.addEventListener( 'touchstart', onPointerStart, false );
-// 监听触摸移动
-document.addEventListener( 'touchmove', onPointerMove, false );
-// 监听触摸结束
-document.addEventListener( 'touchend', onPointerUp, false );
 
 
-var isUserInteracting = false,
-    onMouseDownMouseX = 0, onMouseDownMouseY = 0,
-    lon = 0, onMouseDownLon = 0,
-    lat = 0, onMouseDownLat = 0,
-    phi = 0, theta = 0;
+init();
+animate();
+var scene, camera, renderer, controls;
 
-function onPointerStart(event) {
+function init() {
+    // 创建场景
+    scene = new THREE.Scene;
+    // 创建透视照相机
+    var fov = 75,
+        aspect = window.innerWidth / window.innerHeight,
+        near = 0.1,
+        far = 100;
+    camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
+    camera.position.z = 0.01;
+
+    var textures = getTextureFromFile('/images/fullview.jpg', 6);
+
+    // 模型
+    var geometry = new THREE.BoxBufferGeometry(1, 1, 1);
+    geometry.scale(-1, 1, 1);
+    // 材质
+    var material = [];
+    for (let i = 0; i < 6; i++) {
+        material.push(new THREE.MeshBasicMaterial({ map: textures[i]}))
+    }
+
+    // 网格
+    var mesh = new THREE.Mesh(geometry, material);
+    scene.add(mesh)
+
+
+    // 创建渲染器
+    renderer= new THREE.WebGLRenderer();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setPixelRatio(window.devicePixelRatio);
+    document.body.appendChild(renderer.domElement);
+
+    controls = new THREE.OrbitControls(camera, renderer.domElement);
+    controls.enableZoom = false;
+    controls.enablePan = false;
+    controls.enableDamping = true;
 
 }
 
-function onPointerMove() {
+window.addEventListener('resize', onWindowResize, false);
 
-}
+function getTextureFromFile(imgUrl, num) {
+    var textureData = [];
+    for (let i = 0; i < num; i++) {
+        textureData[ i ] = new THREE.Texture();
+    }
 
-function onPointerUp() {
+    var imageObj = new Image();
+    imageObj.onload = function () {
+        var imageWidth = imageObj.height;
+        for (let i = 0; i < textureData.length; i++) {
+            var canvas = document.createElement('canvas');
+            var context = canvas.getContext('2d');
+            canvas.width = imageWidth;
+            canvas.height = imageWidth;
+            context.drawImage(imageObj, 500, 0, window.innerWidth, imageWidth, 0, 0, imageWidth, imageWidth);
+            textureData[i].image = canvas;
+            textureData[i].needsUpdate = true;
+        }
+    };
 
-}
+    imageObj.src = imgUrl;
 
-function onDocumentMouseWheel() {
-
+    return textureData;
 }
 
 function animate() {
-    requestAnimationFrame( animate );
-    update();
+    requestAnimationFrame(animate);
+    controls.update();
+    // 执行渲染
+    renderer.render(scene, camera);
 }
 
-function update() {
-
-    if ( isUserInteracting === false ) {
-        lon += 0.1;
-    }
-
-    lat = Math.max( - 85, Math.min( 85, lat ) );
-    phi = THREE.MathUtils.degToRad( 90 - lat );
-    theta = THREE.MathUtils.degToRad( lon );
-
-    camera.target.x = 500 * Math.sin( phi ) * Math.cos( theta );
-    camera.target.y = 500 * Math.cos( phi );
-    camera.target.z = 500 * Math.sin( phi ) * Math.sin( theta );
-
-    camera.lookAt( camera.target );
-
-    renderer.render( scene, camera );
-}
-
-
-animate();
-
-window.addEventListener('resize', onResize, false);
-
-function onResize() {
-    camera.aspect = window.innerWidth / window.innerHeight;
+// 透视浏览器窗口自适应
+function onWindowResize() {
+    renderer.setSize(window.innerWidth, window.innerHeight)
+    camera.aspect = window.innerWidth, window.innerHeight;
     camera.updateProjectionMatrix();
-    renderer.setSize(window.innerWidth, window.innerHeight);
 }
