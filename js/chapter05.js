@@ -1,12 +1,12 @@
 var scene = new THREE.Scene;
 
-var camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 1000);
+var camera = new THREE.PerspectiveCamera(105, window.innerWidth / window.innerHeight, 1, 1000);
 // 创建一个三维向量 (0, 0, 0) - (x, y, z)
 camera.target = new THREE.Vector3(0, 0, 0)
 
 // 创建一个缓冲几何体
-var geometry = new THREE.SphereBufferGeometry(500, 60, 40);
-geometry.scale(-1, 1, 1);
+var geometry = new THREE.SphereBufferGeometry(100, 50, 40);
+geometry.scale(1, 1, -1);
 
 // 加载图片
 var texture = new THREE.TextureLoader().load('/images/fullview.jpg');

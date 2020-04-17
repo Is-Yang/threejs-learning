@@ -45,7 +45,6 @@ var material = new THREE.MeshBasicMaterial({
 var mesh = new THREE.Mesh(geometry, material);
 scene.add(mesh); 
 
-
 /**
  *  默认情况下，物体将会添加到（0，0，0）的坐标，将使摄像机与立方体彼此在一起
  * 我们需要将摄像机稍微向外移动一些

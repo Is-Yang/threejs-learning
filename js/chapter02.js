@@ -6,9 +6,9 @@ var scene = new THREE.Scene();
 /**
  * 创建网格模型
  */
-// 创建一个立方体几何对象Geometry
+// 创建一个立方体几何对象Geometry 长-宽-高
 var geometry = new THREE.BoxGeometry(100, 100, 100); 
- // 材质对象Material 一种非光泽表面的材质，没有镜面高光
+ // 材质对象Material 一种阴影分明的材质
 var material = new THREE.MeshLambertMaterial({
     color: 0xff1100
 });

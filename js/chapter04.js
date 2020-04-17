@@ -15,10 +15,10 @@ function init() {
     camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
     camera.position.z = 0.01;
 
-    var textures = getTextureFromFile('/images/fullview.jpg', 6);
+    var textures = getTextureFromFile('/images/sun_temple_stripe.jpg', 6);
 
-    // 模型
-    var geometry = new THREE.BoxBufferGeometry(1, 1, 1);
+    // 几何体
+    var geometry = new THREE.BoxGeometry(1, 1, 1);
     geometry.scale(-1, 1, 1);
     // 材质
     var material = [];
@@ -29,7 +29,6 @@ function init() {
     // 网格
     var mesh = new THREE.Mesh(geometry, material);
     scene.add(mesh)
-
 
     // 创建渲染器
     renderer= new THREE.WebGLRenderer();
@@ -60,7 +59,7 @@ function getTextureFromFile(imgUrl, num) {
             var context = canvas.getContext('2d');
             canvas.width = imageWidth;
             canvas.height = imageWidth;
-            context.drawImage(imageObj, 500, 0, window.innerWidth, imageWidth, 0, 0, imageWidth, imageWidth);
+            context.drawImage(imageObj, imageWidth*i, 0, imageWidth, imageWidth, 0, 0, imageWidth, imageWidth);
             textureData[i].image = canvas;
             textureData[i].needsUpdate = true;
         }
@@ -80,7 +79,7 @@ function animate() {
 
 // 透视浏览器窗口自适应
 function onWindowResize() {
-    renderer.setSize(window.innerWidth, window.innerHeight)
-    camera.aspect = window.innerWidth, window.innerHeight;
+    camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
+    renderer.setSize( window.innerWidth, window.innerHeight );
 }
