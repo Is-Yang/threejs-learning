@@ -139,3 +139,6 @@ function animate() {
 
 animate()
 ```
+
+### 天空盒子思维导图
+![Alt text](./天空盒子程序结构.png)
