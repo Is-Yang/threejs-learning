@@ -28,7 +28,6 @@ var urls = [
 // 使用CubeTextureLoader加载器
 var textureCube = new THREE.CubeTextureLoader().load( urls );
 
-scene = new THREE.Scene();
 scene.background = textureCube;
 
 var renderer = new THREE.WebGLRenderer();
